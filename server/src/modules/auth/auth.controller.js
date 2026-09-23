@@ -1,7 +1,6 @@
-import env from '../../config/env'
+import env from '../../config/env.js'
 import { User } from '../../models/user.model.js';
-import { AppError } from '../../utils/AppError.js';
-import {asyncHandler} from '../../utils/asyncHandler';
+import {asyncHandler} from '../../utils/asyncHandler.js';
 import * as authService from './auth.service.js';
 
 const cookiesOpt = {

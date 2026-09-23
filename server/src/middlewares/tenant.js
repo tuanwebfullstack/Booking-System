@@ -1,6 +1,6 @@
-import {AppErr} from '../utils/AppError'
-import {asyncHandler} from '../utils/asyncHandler'
-import Tenant from '../models/tenant.model'
+import {AppError} from '../utils/AppError.js'
+import {asyncHandler} from '../utils/asyncHandler.js'
+import {Tenant} from '../models/tenant.model.js'
 
 export const requireTenant = (req,res,next) =>{
     if(!req.tenatId) {
@@ -28,10 +28,10 @@ export const resolveTenant = asyncHandler(async(req,res,next)=>{
     const tenant = await Tenant.findOne({slug, status:'active'}).lean();
 
     if (!tenant) {
-     throw new AppErr('Tenant không tồn tại hoặc bị khóa',404)
+     throw new AppError('Tenant không tồn tại hoặc bị khóa',404)
     }
     if(req.user.tenantId !== String(tenant._id)) {
-       throw new AppErr('Tenant không đúng',404)
+       throw new AppError('Tenant không đúng',404)
     }
 
     req.tenantId = tenant._id;

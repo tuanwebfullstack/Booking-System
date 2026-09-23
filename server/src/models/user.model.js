@@ -13,20 +13,11 @@ const userSchema = mongoose.Schema({
     timestamps:true
 })
 
-userSchema.pre('save',async function (next) {
+userSchema.pre('save', async function () {
     if(!this.isModified('password')) {
-        return next()
+        return 
     }
-    try {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(this.password,salt);
-
-        thid.password=hashedPassword
-        next();
-        
-    } catch (error) {
-        next(error)
-    }
+    this.password = await bcrypt.hash(this.password,10);
 })
 
 userSchema.method('validatePassword',async function (password) {

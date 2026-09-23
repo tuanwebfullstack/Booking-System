@@ -1,8 +1,7 @@
-import User from '../../models/user.model';
-import Tenant from '../../models/tenant.model';
-import AppError from '../../utils/AppError';
-import { signAccess,signRefresh,verifyRefresh,signRefresh} from '../../utils/jwt';
-import env from '../../config/env'
+import {User} from '../../models/user.model.js';
+import {Tenant} from '../../models/tenant.model.js';
+import {AppError} from '../../utils/AppError.js';
+import { signAccess,verifyRefresh,signRefresh} from '../../utils/jwt.js';
 
 export const registerOwner  = async ({ tenantName, slug, email, password, name }) =>{
     const existingTenant  = await Tenant.findOne({slug});
@@ -26,7 +25,9 @@ export const registerOwner  = async ({ tenantName, slug, email, password, name }
 
 export const login =async ({email,password,tenantId}) =>{
 
-    const existingUser = await User.findOne({email,tenantId}).select("+password");
+    const query = tenantId ? { email, tenantId } : { email };
+
+    const existingUser = await User.findOne(query).select("+password");
 
     if(!existingUser) {
         throw new AppError('Email hoặc mật khẩu không đúng',401);
