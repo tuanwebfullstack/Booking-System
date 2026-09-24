@@ -26,24 +26,25 @@ api.interceptors.request.use((config)=>{
     return config
 })
 
-api.interceptors.response.use((res)=>{
-    (res) =>res,
+api.interceptors.response.use(
+    (res) => res,
 
-    async (err) =>{
+    async (err) => {
         const original = err.config;
 
-        if(err.response?.status === 401 && !original._retry) {
+        if (err.response?.status === 401 && !original._retry) {
             original._retry = true;
 
-            const {data} = await api.post('/auth/refresh')
+            const { data } = await api.post('/auth/refresh');
 
             setAccessToken(data.accessToken);
 
-            original.headers.Authorization = `Bearer ${data.accessToken}`;
+            original.headers.Authorization =
+                `Bearer ${data.accessToken}`;
 
-            return api(original)
+            return api(original);
         }
 
-        return Promise.reject(err)
+        return Promise.reject(err);
     }
-})
+);
